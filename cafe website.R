@@ -8,7 +8,7 @@ library(shinyjs)
 default_store_longitude <- 80.1221
 default_store_latitude <- 12.9211
 
-# Initialize cart_items as a reactiveValues object to store cart items and prices
+# cart_items
 cart_items <- reactiveValues(items = character(0), prices = numeric(0))
 
 # Cafe Website UI
@@ -70,7 +70,7 @@ cafe_ui <- fluidPage(
              p("And let us not forget the Danish Conspiracy—rumors abound that the Danish pastries communicate with extraterrestrials, their mission: intergalactic peace through buttery flakiness. Finally, there are the Time-Traveling Waffles, each bite a teleportation to moments past or future, where Marie Antoinette and Albert Einstein might be your brunch companions. At Lupa Mini Cafe, it's more than a cafe; it's an enchanting odyssey, a portal to the whimsical, where the absurdity is celebrated, and coffee flows like magic. Cheers to the caffeinated adventures!"),
              leafletOutput("map")
     ),
-    tabPanel("text me \U0001F36D",  # New tab for the chatbot
+    tabPanel("text me \U0001F36D",
              titlePanel("Lubna"),
              p("still i can reply faster than your ex"),
              sidebarLayout(
@@ -91,9 +91,9 @@ cafe_ui <- fluidPage(
   )
 )
 
-# Define Cafe Website Server Logic
+# Cafe Website Server Logic
 cafe_server <- function(input, output, session) {
-  # Function to calculate the total price of items in the cart
+  #calculate cart
   calculate_total_price <- function() {
     total_price <- sum(cart_items$prices)
     return(total_price)
@@ -139,7 +139,7 @@ cafe_server <- function(input, output, session) {
     paste("Total Price: $", formatted_price)
   })
   
-  # Load the shinyjs library for JavaScript functionality
+  # shinyjs library for js 
   library(shinyjs)
   
   # Place an order and show a modal
@@ -175,7 +175,7 @@ chatbot_server <- function(input, output, session) {
   observeEvent(input$sendMessage, {
     user_message <- tolower(input$userMessage)
     
-    # Define chatbot responses based on user input
+    # chatbot responses based on user input
     bot_response <- switch(
       user_message,
       "menu" = "Here is our menu:\n1. Coffee\n2. Tea\n3. Sandwiches\n4. Pastries\n5. waffles",
@@ -204,7 +204,6 @@ chatbot_server <- function(input, output, session) {
       "who created you" = "I was created by ... (provide creator's name here).",
       "lupa means?" = "The name 'Lupa' was created by Paul after a lot of struggles\n Lupa is the rearranged words of Paul\U0001F480 .",
       "yes"="Your order has been placed. Thank you"
-      # Add more responses for other user queries
     )
     
     if (is.null(bot_response)) {
@@ -227,12 +226,12 @@ chatbot_server <- function(input, output, session) {
 shinyApp(
   ui = cafe_ui,
   server = function(input, output, session) {
-    cafe_server(input, output, session)  # Cafe Website Server Logic
+    cafe_server(input, output, session)
     output$map <- renderLeaflet({
       leaflet() %>%
         addTiles() %>%
         setView(lng = default_store_longitude, lat = default_store_latitude, zoom = 15)
        })
-    chatbot_server(input, output, session)  # Chatbot Server Logic
+    chatbot_server(input, output, session)
   }
 )
